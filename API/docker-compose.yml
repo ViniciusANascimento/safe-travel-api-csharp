@@ -1,0 +1,14 @@
+version: "3.8"
+
+services:
+  postgres:
+    build: .
+    container_name: postgres_traveling_app
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: dev_traveling
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: traveling
+    volumes:
+      - ./data:/var/lib/postgresql/data

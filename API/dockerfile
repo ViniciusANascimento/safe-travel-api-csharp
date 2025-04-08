@@ -1,0 +1,9 @@
+FROM postgres:15-alpine
+
+# Define variáveis de ambiente (pode também usar um docker-compose pra isso)
+ENV POSTGRES_DB=dev_traveling
+ENV POSTGRES_USER=admin
+ENV POSTGRES_PASSWORD=traveling
+
+# Expondo a porta padrão do PostgreSQL
+EXPOSE 5432

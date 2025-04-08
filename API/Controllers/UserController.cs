@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.DTO.User;
+using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,36 +36,22 @@ namespace API.Controllers
                 return BadRequest(e.Message);
             }
         }
-        // [HttpPut]
-        // public IActionResult UpdateUser()
-        // {
-        //     if (true)
-        //     {
-        //         return BadRequest();
-        //     }
-        //     return Created();
-        // }
 
-        [HttpGet("{id?}")]
-        public IActionResult GetUsers(string id)
+        [HttpGet()]
+        public async Task<IActionResult> GetUsers(string? id, int limit = 10, int offset = 0)
         {
-            if (id == null)
+            if (string.IsNullOrEmpty(id))
             {
-                return BadRequest();
+                List<GetUserDTO> user = await _userService.GetUsers(limit, offset);
+                return Ok(user);
             }
-            var user = _userService.GetUsers(id.ToString());
-            return Ok(user);
+            else
+            {
+                GetUserDTO user = _userService.GetUsers(id);
+                return Ok(user);
+            }
+            
         }
         
-
-        // [HttpDelete]
-        // public IActionResult DeleteUser()
-        // {
-        //     if (true)
-        //     {
-        //         return BadRequest();
-        //     }
-        //     return Created();
-        // }
     }
 }

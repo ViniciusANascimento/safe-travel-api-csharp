@@ -20,14 +20,20 @@ namespace API.Repository
         {
             _context.Users.Add(user);
             _context.SaveChanges();
-            
+
             Console.WriteLine($"Usuario {user.Id} criado com sucesso");
         }
 
         public Users GetUserById(string id)
         {
-            var user = _context.Users.FirstOrDefault(x => x.Id == id);
-            return user;
+            return _context.Users.FirstOrDefault(x => x.Id == id);
+            //return user;
+        }
+
+        public async Task<List<Users>> GetUsers(int limit,int offset)
+        {
+            return _context.Users.Skip(offset).Take(limit).ToList();
+            //return nextPage;
         }
     }
 }

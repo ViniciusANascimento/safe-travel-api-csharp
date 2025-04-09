@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using API.DTO.User;
-using API.Models;
 using API.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -37,7 +32,7 @@ namespace API.Controllers
             }
         }
 
-        [HttpGet()]
+        [HttpGet("{id?}")]
         public async Task<IActionResult> GetUsers(string? id, int limit = 10, int offset = 0)
         {
             if (string.IsNullOrEmpty(id))
@@ -50,8 +45,39 @@ namespace API.Controllers
                 GetUserDTO user = _userService.GetUsers(id);
                 return Ok(user);
             }
-            
+
         }
-        
+
+        [HttpPatch("{id}")]
+        public IActionResult UpdateUser(string id, [FromBody] UpdateUserDTO user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var usuarioAtualizado = _userService.UpdateUser(id, user);
+                return Ok(usuarioAtualizado);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult DeleteUser(string id)
+        {
+            try
+            {
+                _userService.DeleteUser(id);
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using API.Context;
-using API.Models;
+using API.Models.User;
+using Microsoft.EntityFrameworkCore;
 
 namespace API.Repository
 {
@@ -27,13 +28,30 @@ namespace API.Repository
         public Users GetUserById(string id)
         {
             return _context.Users.FirstOrDefault(x => x.Id == id);
-            //return user;
         }
 
         public async Task<List<Users>> GetUsers(int limit,int offset)
         {
-            return _context.Users.Skip(offset).Take(limit).ToList();
+            return await _context.Users.Skip(offset).Take(limit).ToListAsync();
             //return nextPage;
         }
-    }
+
+        public Users UpdateUser(Users user)
+        {
+            var userUpdated = _context.Users.Update(user);
+            
+            if (userUpdated.State == Microsoft.EntityFrameworkCore.EntityState.Modified)
+            {
+                _context.SaveChanges();
+                Console.WriteLine($"Usuario {user.Id} foi alterado com sucesso");
+            }
+            else
+            {
+                Console.WriteLine("Não foi possivel alterar o usuario");
+            }
+            return user;
+
+            
+        }
+  }
 }
